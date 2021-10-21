@@ -1,10 +1,11 @@
 ﻿using CoffeeMakerApi.ViewModels;
+using System.Threading.Tasks;
 
 namespace CoffeeMakerApi.ServiceContracts
 {
     public interface IBrewCoffeeService
     {
-        BrewCoffeeViewModel BrewCoffee();
+        Task<BrewCoffeeViewModel> BrewCoffee();
         bool AreYouATeaPot(int teapotDay, int teapotMonth);
     }
 }

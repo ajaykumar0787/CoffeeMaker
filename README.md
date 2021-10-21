@@ -19,6 +19,7 @@ The application has 2 endpoints
 * The different entities of concern are separated using different folders
 * All the services have contracts that can be injected
 * Throwing of 503 error is handled in middleware itself without having the need to go to the end point but still leverages a service as that is where the business logic sits
+* Weather based coffee brewing is done and relevant tests have been added with mocks in place
 
 ## What more can we do
 

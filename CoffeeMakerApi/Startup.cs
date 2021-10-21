@@ -110,6 +110,7 @@ namespace CoffeeMakerApi
         {
             services.AddHttpContextAccessor();
             services.AddSingleton<IApiCallTrackerService>(x => new ApiCallTrackerService(Configuration.GetValue<int>("503StatusCallCount", 1)));
+            services.AddSingleton<IWeatherService>(x => new WeatherService(Configuration.GetValue<string>("WeatherApiUrl", "")));
 
             services.AddScoped<IBrewCoffeeService, BrewCoffeeService>();
         }

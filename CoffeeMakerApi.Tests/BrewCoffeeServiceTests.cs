@@ -1,5 +1,6 @@
 ﻿using CoffeeMakerApi.ServiceContracts;
 using CoffeeMakerApi.Services;
+using Moq;
 using System;
 using Xunit;
 
@@ -7,31 +8,41 @@ namespace CoffeeMakerApi.Tests
 {
     public class BrewCoffeeServiceTests
     {
-        private readonly IBrewCoffeeService _brewCoffeeService;
+        private Mock<IWeatherService> mockWeatherService = new Mock<IWeatherService>();
 
-        public BrewCoffeeServiceTests()
+        [Fact]
+        public async void TestBrewCoffeeHot()
         {
-            _brewCoffeeService = new BrewCoffeeService();
+            mockWeatherService.Setup(p => p.GetCurrentTemperatureInCelsius()).ReturnsAsync(0.0);
+            var brewCoffeeService = new BrewCoffeeService(mockWeatherService.Object);
+            var result = await brewCoffeeService.BrewCoffee();
+            Assert.Equal("Your piping hot coffee is ready", result.Message);
         }
 
         [Fact]
-        public void TestBrewCoffee()
+        public async void TestBrewCoffeeCold()
         {
-            var result = _brewCoffeeService.BrewCoffee();
-            Assert.Equal("Your piping hot coffee is ready", result.Message);
+            mockWeatherService.Setup(p => p.GetCurrentTemperatureInCelsius()).ReturnsAsync(31.0);
+            var brewCoffeeService = new BrewCoffeeService(mockWeatherService.Object);
+            var result = await brewCoffeeService.BrewCoffee();
+            Assert.Equal("Your refreshing iced coffee is ready", result.Message);
         }
 
         [Fact]
         public void TestAreYouATeaPotTrue()
         {
-            var result = _brewCoffeeService.AreYouATeaPot(DateTime.Now.Day, DateTime.Now.Month);
+            mockWeatherService.Setup(p => p.GetCurrentTemperatureInCelsius()).ReturnsAsync(0.0);
+            var brewCoffeeService = new BrewCoffeeService(mockWeatherService.Object);
+            var result = brewCoffeeService.AreYouATeaPot(DateTime.Now.Day, DateTime.Now.Month);
             Assert.True(result);
         }
 
         [Fact]
         public void TestAreYouATeaPotFalse()
         {
-            var result = _brewCoffeeService.AreYouATeaPot(29, 2);
+            mockWeatherService.Setup(p => p.GetCurrentTemperatureInCelsius()).ReturnsAsync(0.0);
+            var brewCoffeeService = new BrewCoffeeService(mockWeatherService.Object);
+            var result = brewCoffeeService.AreYouATeaPot(29, 2);
             Assert.False(result);
         }
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;
+using System.Threading.Tasks;
 
 namespace CoffeeMakerApi.Controllers
 {
@@ -28,14 +29,14 @@ namespace CoffeeMakerApi.Controllers
         /// </summary>
         /// <returns>Message, Prepared Time</returns>
         [HttpGet]
-        public IActionResult Get()
+        public async Task<IActionResult> Get()
         {
             try
             {
                 if(_brewCoffeeService.AreYouATeaPot(_teapotDay, _teapotMonth))
                     return StatusCode(StatusCodes.Status418ImATeapot, string.Empty);
 
-                var brewCoffeeViewModel = _brewCoffeeService.BrewCoffee();
+                var brewCoffeeViewModel = await _brewCoffeeService.BrewCoffee();
 
                 return Ok(brewCoffeeViewModel);
             }
